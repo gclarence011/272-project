@@ -28,6 +28,7 @@ CLERK_SECRET_KEY=your_clerk_secret_key
 
 # Backend port
 NEXT_PUBLIC_API_BASE_URL=http://server:8002
+DYNAMODB_LOCAL_URL=http://dynamodb-local:8000
 
 # AWS DynamoDB 
 AWS_ACCESS_KEY_ID=dummy
@@ -131,6 +132,7 @@ Create a `.env` file in the root of the backend directory (or edit the `.env.exa
 ```env
 PORT=8002
 NODE_ENV=development
+DynamoDB_LOCAL_URL=http://localhost:3000
 
 CLERK_PUBLISHABLE_KEY=your-clerk-puplishable-key
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your-clerk-puplishable-key
