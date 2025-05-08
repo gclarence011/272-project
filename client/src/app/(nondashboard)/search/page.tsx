@@ -1,19 +1,27 @@
 "use client";
 
 import Loading from "@/components/Loading";
-import { useGetCoursesQuery } from "@/state/api";
+import { useGetCoursesQuery ,useCreateTransactionMutation} from "@/state/api";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import CourseCardSearch from "@/components/CourseCardSearch";
 import SelectedCourse from "./SelectedCourse";
+import { useClerk, useUser } from "@clerk/nextjs";
+
 
 const Search = () => {
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
-  const { data: courses, isLoading, isError } = useGetCoursesQuery({});
+  const { 
+    data: courses, 
+    isLoading: isCoursesLoading, 
+    isError: isCoursesError
+  } = useGetCoursesQuery({});
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const router = useRouter();
+  const {user} = useUser();
+  const [createTransaction, { isLoading: isTransactionLoading, isError: isTransactionError }] = useCreateTransactionMutation();
 
   useEffect(() => {
     if (courses) {
@@ -26,8 +34,8 @@ const Search = () => {
     }
   }, [courses, id]);
 
-  if (isLoading) return <Loading />;
-  if (isError || !courses) return <div>Failed to fetch courses</div>;
+  if (isCoursesLoading) return <Loading />;
+  if (isCoursesError || !courses) return <div>Failed to fetch courses</div>;
 
   const handleCourseSelect = (course: Course) => {
     setSelectedCourse(course);
@@ -36,10 +44,25 @@ const Search = () => {
     });
   };
 
-  const handleEnrollNow = (courseId: string) => {
-    router.push(`/checkout?step=1&id=${courseId}&showSignUp=false`, {
-      scroll: false,
-    });
+  const handleEnrollNow = async (courseId: string) => {
+    try {
+      const transactionData: Partial<Transaction> = {
+        transactionId: "empty",
+        userId: user?.id,
+        courseId,
+        paymentProvider: "stripe",
+        amount: 0,
+      };
+  
+      await createTransaction(transactionData).unwrap(); 
+      router.push("/user/courses");
+    } catch (error) {
+      console.error("Transaction failed:", error);
+    }
+
+  if (isTransactionLoading) return <Loading />;
+  if (isTransactionError || !courses) return <div>Failed to fetch courses</div>;
+
   };
 
   return (

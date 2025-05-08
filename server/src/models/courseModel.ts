@@ -1,5 +1,5 @@
 import { Schema, model } from "dynamoose";
-
+//Comments//
 const commentSchema = new Schema({
   commentId: {
     type: String,
@@ -19,6 +19,7 @@ const commentSchema = new Schema({
   },
 });
 
+//Rename this Module
 const chapterSchema = new Schema({
   chapterId: {
     type: String,
@@ -46,6 +47,7 @@ const chapterSchema = new Schema({
   },
 });
 
+// DELETE THIS
 const sectionSchema = new Schema({
   sectionId: {
     type: String,
@@ -64,6 +66,7 @@ const sectionSchema = new Schema({
   },
 });
 
+//COURSE//
 const courseSchema = new Schema(
   {
     courseId: {
@@ -75,7 +78,7 @@ const courseSchema = new Schema(
       type: String,
       required: true,
     },
-    teacherName: {
+    teacherName: { //store in user?
       type: String,
       required: true,
     },
@@ -90,10 +93,11 @@ const courseSchema = new Schema(
       type: String,
       required: true,
     },
+    // ADD array of tools for filter
     image: {
       type: String,
     },
-    price: {
+    price: { // DELETE
       type: Number,
     },
     level: {
@@ -110,7 +114,7 @@ const courseSchema = new Schema(
       type: Array,
       schema: [sectionSchema],
     },
-    enrollments: {
+    enrollments: { // delete?
       type: Array,
       schema: [
         new Schema({

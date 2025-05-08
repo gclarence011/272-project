@@ -20,3 +20,15 @@ export const updateUser = async (
     res.status(500).json({ message: "Error updating user", error });
   }
 };
+
+
+export const getUsers = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const {data} = await clerkClient.users.getUserList()
+
+    res.json({ message: "Courses retrieved successfully", data });
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    res.status(500).json({ message: "Error retrieving users", error });
+  }
+};

@@ -77,6 +77,15 @@ declare global {
     lastAccessedTimestamp: string;
   }
 
+  interface AssignCourse {
+    userId: string;
+    courseId: string;
+    note: string;
+    dueDate: date;
+    status: string;
+  }
+
+
   type CreateUserArgs = Omit<User, "userId">;
   type CreateCourseArgs = Omit<Course, "courseId">;
   type CreateTransactionArgs = Omit<Transaction, "transactionId">;

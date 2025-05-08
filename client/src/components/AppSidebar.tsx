@@ -13,12 +13,13 @@ import {
 } from "@/components/ui/sidebar";
 import {
   BookOpen,
-  Briefcase,
-  DollarSign,
+  Book,
+  BookA,
   LogOut,
   PanelLeft,
   Settings,
   User,
+  BookCopy,
 } from "lucide-react";
 import Loading from "./Loading";
 import Image from "next/image";
@@ -33,14 +34,14 @@ const AppSidebar = () => {
 
   const navLinks = {
     student: [
-      { icon: BookOpen, label: "Courses", href: "/user/courses" },
-      { icon: Briefcase, label: "Billing", href: "/user/billing" },
+      { icon: BookOpen, label: "Enrolled", href: "/user/courses" },
+      { icon: Book, label: "Assigned", href: "/user/assigned" },
       { icon: User, label: "Profile", href: "/user/profile" },
       { icon: Settings, label: "Settings", href: "/user/settings" },
     ],
     teacher: [
-      { icon: BookOpen, label: "Courses", href: "/teacher/courses" },
-      { icon: DollarSign, label: "Billing", href: "/teacher/billing" },
+      { icon: BookCopy, label: "Courses", href: "/teacher/courses" },
+      { icon: BookA, label: "Assign", href: "/teacher/assign" },
       { icon: User, label: "Profile", href: "/teacher/profile" },
       { icon: Settings, label: "Settings", href: "/teacher/settings" },
     ],
@@ -76,7 +77,7 @@ const AppSidebar = () => {
                     height={20}
                     className="app-sidebar__logo"
                   />
-                  <p className="app-sidebar__title">EDROH</p>
+                  <p className="app-sidebar__title">YOLO LMS</p>
                 </div>
                 <PanelLeft className="app-sidebar__collapse-icon" />
               </div>

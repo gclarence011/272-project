@@ -17,17 +17,20 @@ import courseRoutes from "./routes/courseRoutes";
 import userClerkRoutes from "./routes/userClerkRoutes";
 import transactionRoutes from "./routes/transactionRoutes";
 import userCourseProgressRoutes from "./routes/userCourseProgressRoutes";
+import assignCourseRoutes from "./routes/assignCourseRoutes";
 
 /* CONFIGURATIONS */
 dotenv.config();
 const isProduction = process.env.NODE_ENV === "production";
 if (!isProduction) {
-  dynamoose.aws.ddb.local();
+  dynamoose.aws.ddb.local("http://dynamodb-local:8000");
+
 }
 
 export const clerkClient = createClerkClient({
   secretKey: process.env.CLERK_SECRET_KEY,
 });
+
 
 const app = express();
 app.use(express.json());
@@ -44,10 +47,11 @@ app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
-app.use("/courses", courseRoutes);
+app.use("/courses", requireAuth(), courseRoutes);
 app.use("/users/clerk", requireAuth(), userClerkRoutes);
 app.use("/transactions", requireAuth(), transactionRoutes);
 app.use("/users/course-progress", requireAuth(), userCourseProgressRoutes);
+app.use("/assignCourse", requireAuth(), assignCourseRoutes);
 
 /* SERVER */
 const port = process.env.PORT || 3000;
@@ -56,7 +60,7 @@ if (!isProduction) {
     console.log(`Server running on port ${port}`);
   });
 }
-
+/*
 // aws production environment
 const serverlessApp = serverless(app);
 export const handler = async (event: any, context: any) => {
@@ -70,3 +74,4 @@ export const handler = async (event: any, context: any) => {
     return serverlessApp(event, context);
   }
 };
+*/

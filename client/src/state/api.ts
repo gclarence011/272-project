@@ -16,7 +16,7 @@ const customBaseQuery = async (
       if (token) {
         headers.set("Authorization", `Bearer ${token}`);
       }
-      return headers;
+      return headers; 
     },
   });
 
@@ -61,7 +61,7 @@ const customBaseQuery = async (
 export const api = createApi({
   baseQuery: customBaseQuery,
   reducerPath: "api",
-  tagTypes: ["Courses", "Users", "UserCourseProgress"],
+  tagTypes: ["Courses", "Users", "UserCourseProgress","UserEnrolledCourses"],
   endpoints: (build) => ({
     /* 
     ===============
@@ -76,6 +76,13 @@ export const api = createApi({
       }),
       invalidatesTags: ["Users"],
     }),
+
+    getUsers: build.query<User[], void>({
+      query: () => ({
+        url: "users/clerk",
+      }),
+    }),
+    
 
     /* 
     ===============
@@ -154,21 +161,32 @@ export const api = createApi({
     getTransactions: build.query<Transaction[], string>({
       query: (userId) => `transactions?userId=${userId}`,
     }),
-    createStripePaymentIntent: build.mutation<
-      { clientSecret: string },
-      { amount: number }
-    >({
-      query: ({ amount }) => ({
-        url: `/transactions/stripe/payment-intent`,
-        method: "POST",
-        body: { amount },
-      }),
-    }),
+
+
     createTransaction: build.mutation<Transaction, Partial<Transaction>>({
       query: (transaction) => ({
         url: "transactions",
         method: "POST",
         body: transaction,
+      }),
+      invalidatesTags:["UserEnrolledCourses"],
+    }),
+
+    /*
+    ===============
+    ASSIGN COURSE 
+    =============== 
+    */
+
+    getAssignCourses: build.query<Course[], string>({
+      query: (userId) => `assignCourse/${userId}`,
+    }),
+
+    createAssignCourse: build.mutation<AssignCourse, Partial<AssignCourse>>({
+      query: (assignCourse) => ({
+        url: "assignCourse",
+        method: "POST",
+        body: assignCourse,
       }),
     }),
 
@@ -179,7 +197,7 @@ export const api = createApi({
     */
     getUserEnrolledCourses: build.query<Course[], string>({
       query: (userId) => `users/course-progress/${userId}/enrolled-courses`,
-      providesTags: ["Courses", "UserCourseProgress"],
+      providesTags: ["Courses", "UserCourseProgress", "UserEnrolledCourses"],
     }),
 
     getUserCourseProgress: build.query<
@@ -243,8 +261,10 @@ export const {
   useGetUploadVideoUrlMutation,
   useGetTransactionsQuery,
   useCreateTransactionMutation,
-  useCreateStripePaymentIntentMutation,
   useGetUserEnrolledCoursesQuery,
   useGetUserCourseProgressQuery,
   useUpdateUserCourseProgressMutation,
+  useGetUsersQuery,
+  useCreateAssignCourseMutation,
+  useGetAssignCoursesQuery,
 } = api;

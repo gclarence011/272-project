@@ -1,3 +1,5 @@
+// TURN THIS TO ASSIGNMENT / ENROLMENT
+
 import { Schema, model } from "dynamoose";
 
 const transactionSchema = new Schema(

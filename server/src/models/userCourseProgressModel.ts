@@ -1,3 +1,5 @@
+// TRACKING
+
 import { Schema, model } from "dynamoose";
 
 const chapterProgressSchema = new Schema({

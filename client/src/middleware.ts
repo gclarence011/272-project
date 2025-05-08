@@ -10,6 +10,7 @@ export default clerkMiddleware(async (auth, req) => {
     (sessionClaims?.metadata as { userType: "student" | "teacher" })
       ?.userType || "student";
 
+      
   if (isStudentRoute(req)) {
     if (userRole !== "student") {
       const url = new URL("/teacher/courses", req.url);
